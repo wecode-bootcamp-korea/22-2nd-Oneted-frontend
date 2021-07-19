@@ -8,8 +8,8 @@ const theme = {
 
 const setFlex = (justifyContent = 'center', alignItem = 'center') => css`
   display: flex;
-  align-item: $(justifyContent);
-  justify-content: $(alignItem);
+  align-item: ${justifyContent};
+  justify-content: ${alignItem};
 `;
 
 export { theme, setFlex };
