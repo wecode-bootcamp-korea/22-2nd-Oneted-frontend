@@ -6,6 +6,7 @@ import Detail from './pages/Detail/Detail';
 import Nav from './components/Nav/Nav';
 import Resume from './pages/Resume/Resume';
 import ResumeForm from './pages/Resume/ResumeForm';
+import SearchResult from './pages/SearchResult/SearchResult';
 
 class Routes extends Component {
   render() {
@@ -17,6 +18,7 @@ class Routes extends Component {
           <Route exact path="/detail" component={Detail} />
           <Route exact path="/resume" component={Resume} />
           <Route exact path="/resume-form" component={ResumeForm} />
+          <Route exact path="/search" component={SearchResult} />
         </Switch>
       </Router>
     );
