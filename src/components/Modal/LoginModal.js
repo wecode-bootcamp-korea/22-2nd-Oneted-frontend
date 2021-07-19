@@ -2,30 +2,22 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 
-function LoginModal() {
+function LoginModal(props) {
   const { Kakao } = window;
   const history = useHistory();
 
   const handleKakaoLogin = () => {
     Kakao.Auth.login({
       success: function (response) {
-        fetch(`http://10.58.7.192:8000/users/kakaologin`, {
+        fetch(`http://10.58.2.171:8000/users/kakaologin`, {
           headers: {
-            Authorization: localStorage.getItem(
-              'kakao_a1d1dea38c0f71aaa5336c31c326efb0'
-            ),
+            Authorization: response.access_token,
           },
           method: 'POST',
           body: JSON.stringify({ access_token: response.access_token }),
         })
           .then(res => res.json())
-          .then(res => {
-            localStorage.setItem('kakao_token', res.access_token);
-            if (res.access_token) {
-              alert('카카오 로그인 성공');
-              history.push('/');
-            }
-          });
+          .then(res => {});
       },
       fail: function (err) {
         alert(JSON.stringify(err));
@@ -34,12 +26,12 @@ function LoginModal() {
   };
 
   return (
-    <section>
+    <Dimmer onClick={props.clickModal}>
       <Container>
         <Header>
           <h1>wanted</h1>
           <button>
-            <i className="far fa-window-close"></i>
+            <i className="far fa-window-close" />
           </button>
         </Header>
         <Body>
@@ -53,19 +45,33 @@ function LoginModal() {
           </Intro>
           <Btnbox>
             <button onClick={handleKakaoLogin}>
-              <img src="images/kakao_login_large_wide.png" alt="kakaoBtn" />
+              <img alt="kakaoBtn" src="images/kakao_login_large_wide.png" />
             </button>
-            <button>Google로 시작하기</button>
+            <button></button>
           </Btnbox>
         </Body>
       </Container>
-    </section>
+    </Dimmer>
   );
 }
+
+const Dimmer = styled.section`
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background-color: #00000080;
+  z-index: 200;
+`;
 
 const Container = styled.div`
   position: relative;
   max-width: 400px;
+  position: absolute;
+  left: 40%;
+  top: 20%;
+  background-color: white;
 `;
 
 const Header = styled.div`
@@ -120,6 +126,17 @@ const Btnbox = styled.div`
     background-color: transparent;
     border: none;
     img {
+      margin-bottom: 12px;
+      width: 358px;
+      height: 52px;
+      border: 1px solid #e1e2e3;
+      border-radius: 27px;
+      background-color: #fff;
+      color: #737373;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    div {
       margin-bottom: 12px;
       width: 358px;
       height: 52px;
