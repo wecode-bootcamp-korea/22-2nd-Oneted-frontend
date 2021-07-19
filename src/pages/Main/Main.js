@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
+import styled, { css } from 'styled-components';
+import { theme, setFlex } from '../../styles/theme';
 
 export class Main extends Component {
   render() {
-    return <div></div>;
+    <div></div>;
   }
 }
 
