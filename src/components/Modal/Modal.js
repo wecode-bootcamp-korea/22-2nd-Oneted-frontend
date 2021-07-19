@@ -1,9 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-export class Modal extends Component {
-  render() {
-    return <div></div>;
-  }
-}
+const Modal = () => {
+  return <div></div>;
+};
 
 export default Modal;
