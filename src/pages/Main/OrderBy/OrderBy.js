@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import styled from 'styled-components';
 
-function OrderBy() {
+function OrderBy({ orderByFetchHandler }) {
   const [selected, setSelected] = useState('최신순');
   const [sortList, setSortList] = useState([]);
   const [toggleActive, setToggleActive] = useState(false);
@@ -18,25 +18,35 @@ function OrderBy() {
 
   const setlectSort = name => {
     setSelected(name);
+    setToggleActive(!toggleActive);
+  };
+
+  const sortHandler = list => {
+    setlectSort(list.name);
+    orderByFetchHandler(list.params);
   };
 
   return (
-    <>
+    <Container>
       <OrderByButton onClick={() => toggleHandler()}>
         <span>{selected}</span>
         <i className="fas fa-caret-down"></i>
       </OrderByButton>
       {toggleActive &&
         sortList.map(list => (
-          <OrderByButton key={list.id} onClick={() => setlectSort(list.name)}>
+          <OrderByButton key={list.id} onClick={() => sortHandler(list)}>
             <span>{list.name}</span>
           </OrderByButton>
         ))}
-    </>
+    </Container>
   );
 }
 
 export default OrderBy;
+
+const Container = styled.div`
+  position: relative;
+`;
 
 const OrderByButton = styled.button`
   background: none;
@@ -47,6 +57,7 @@ const OrderByButton = styled.button`
   justify-content: flex-start;
   align-content: center;
   flex-wrap: wrap;
+  background-color: white;
 
   & span {
     margin-left: 10px;
