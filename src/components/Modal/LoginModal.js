@@ -1,14 +1,38 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 
 function LoginModal() {
+  const { Kakao } = window;
+
+  const handleKakaoLogin = () => {
+    Kakao.Auth.login({
+      success: function (response) {
+        fetch(`주소`, {
+          method: 'POST',
+          body: JSON.stringify({ access_token: response.access_token }),
+        })
+          .then(res => res.json())
+          .then(res => {
+            localStorage.setItem('kakao_token', res.access_token);
+            if (res.access_token) {
+              alert('카카오 로그인 성공');
+            }
+          });
+      },
+      fail: function (err) {
+        alert(JSON.stringify(err));
+      },
+    });
+  };
+
   return (
     <section>
       <Container>
         <Header>
           <h1>wanted</h1>
           <button>
-            <i class="far fa-window-close"></i>
+            <i className="far fa-window-close"></i>
           </button>
         </Header>
         <Body>
@@ -21,8 +45,10 @@ function LoginModal() {
             </h2>
           </Intro>
           <Btnbox>
+            <button onClick={handleKakaoLogin}>
+              <img src="images/kakao_login_large_wide.png" alt="kakaoBtn" />
+            </button>
             <button>Google로 시작하기</button>
-            <button>Kakao로 시작하기</button>
           </Btnbox>
         </Body>
       </Container>
@@ -88,20 +114,20 @@ const Intro = styled.div`
 `;
 
 const Btnbox = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 360px;
-  height: 270px;
-
   button {
-    margin-bottom: 12px;
-    width: 358px;
-    height: 52px;
-    border: 1px solid #e1e2e3;
-    border-radius: 27px;
-    background-color: #fff;
-    color: #737373;
-    font-size: 16px;
+    background-color: transparent;
+    border: none;
+    img {
+      margin-bottom: 12px;
+      width: 358px;
+      height: 52px;
+      border: 1px solid #e1e2e3;
+      border-radius: 27px;
+      background-color: #fff;
+      color: #737373;
+      font-size: 16px;
+      cursor: pointer;
+    }
   }
 `;
 
