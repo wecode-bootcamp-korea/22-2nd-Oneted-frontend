@@ -1,25 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 import styled from 'styled-components';
 
 import PostCard from './PostCard/PostCard';
 
-function PostList() {
-  const [requestList, setRequestList] = useState([]);
-
-  useEffect(() => {
-    fetch('/data/postListData.json')
-      .then(res => res.json())
-      .then(data => {
-        setRequestList(data);
-      });
-  }, []);
-
+function PostList(props) {
   return (
     <PostCaradList>
-      {requestList.map((post, index) => (
+      {props.data.map((post, index) => (
         <li key={index}>
-          <PostCard list={post} />
+          <PostCard list={[post]} />
         </li>
       ))}
     </PostCaradList>
