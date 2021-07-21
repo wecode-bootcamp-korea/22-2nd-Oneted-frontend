@@ -7,5 +7,4 @@ const theme = {
   justify-content: ${justifyContent};
   align-items: ${alignItem};`,
 };
-
 export { theme };
