@@ -4,9 +4,10 @@ import styled from 'styled-components';
 
 import FilterButton from './FilterButton/FilterButton';
 import OrderBy from './OrderBy/OrderBy';
+import MainSlider from './MainSlider/MainSlider';
 import PostList from './PostList/PostList';
 
-function Main(props) {
+function Main() {
   //postList 데이터로 쓰일 state
   const [postListData, setpostListData] = useState([]);
   //tag Fetch에 쓰일 state
@@ -48,6 +49,7 @@ function Main(props) {
 
   return (
     <main>
+      <MainSlider />
       <FilterContainer>
         <FilterButton
           title="태그"
