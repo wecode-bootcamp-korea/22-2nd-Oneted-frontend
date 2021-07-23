@@ -3,13 +3,15 @@ import React from 'react';
 import styled from 'styled-components';
 
 import PostList from './PostList/PostList';
+import OrderBy from './OrderBy/OrderBy';
 
 function Main() {
   return (
     <main>
-      <Slide />
+      {/* <Slide />
       <FilterSlide />
-      <PostList />
+      <PostList /> */}
+      <OrderBy />
     </main>
   );
 }
