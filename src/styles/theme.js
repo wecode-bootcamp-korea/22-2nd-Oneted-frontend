@@ -6,5 +6,9 @@ const theme = {
   display: flex;
   justify-content: ${justifyContent};
   align-items: ${alignItem};`,
+  setFlexColumn: `
+  display: flex;
+  flex-direction:column;
+`,
 };
 export { theme };
