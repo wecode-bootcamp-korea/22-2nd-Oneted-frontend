@@ -1,19 +1,27 @@
-import { React, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import LoginModal from '../Modal/LoginModal';
 import SearchModal from '../Modal/SearchModal';
 
+export const LoginState = React.createContext();
+
 const Nav = () => {
-  const [isModal, setIsModal] = useState(false);
-  const [isSearch, setIsSearch] = useState(false);
+  const [isModalOn, setIsModalOn] = useState(false);
+  const [isSearchModalOn, setIsSearchModalOn] = useState(false);
+  const [isLoginOn, setIsLoginOn] = useState(false);
 
   const handleModal = () => {
-    setIsModal(prevIsModal => !prevIsModal);
+    setIsModalOn(prevIsModal => !prevIsModal);
   };
 
   const handleSearch = () => {
-    setIsSearch(prevIsSearch => !prevIsSearch);
+    setIsSearchModalOn(prevIsSearch => !prevIsSearch);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('kakao_token');
+    setIsLoginOn(false);
   };
 
   return (
@@ -33,9 +41,17 @@ const Nav = () => {
             <li onClick={handleSearch}>
               <i className="fas fa-search" />
             </li>
-            {isSearch && <SearchModal clickSearch={handleSearch} />}
-            <li onClick={handleModal}>회원가입/로그인</li>
-            {isModal && <LoginModal clickModal={handleModal} />}
+            {isSearchModalOn && <SearchModal clickSearch={handleSearch} />}
+            {!isLoginOn ? (
+              <li onClick={handleModal}>회원가입/로그인</li>
+            ) : (
+              <li onClick={handleLogout}>로그아웃</li>
+            )}
+
+            <LoginState.Provider value={{ isLoginOn, setIsLoginOn }}>
+              {isModalOn && <LoginModal clickModal={handleModal} />}
+            </LoginState.Provider>
+
             <li>기업 서비스</li>
           </AsideNav>
         </aside>
@@ -45,7 +61,10 @@ const Nav = () => {
 };
 
 const Section = styled.section`
+  position: fixed;
+  width: 100%;
   border-bottom: 1px solid black;
+  background-color: white;
 `;
 
 const Container = styled.div`

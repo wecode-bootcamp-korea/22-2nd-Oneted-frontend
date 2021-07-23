@@ -24,10 +24,8 @@ export default TagModal;
 const Wrapper = styled.div`
   padding-top: 50px;
   margin: 0 66px 0 56px;
-
   ul {
     display: flex;
-
     button {
       height: 50px;
       padding: 0 26px;

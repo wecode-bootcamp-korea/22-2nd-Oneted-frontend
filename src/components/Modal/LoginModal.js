@@ -1,23 +1,34 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
+import { LoginState } from '../Nav/Nav';
 
 function LoginModal(props) {
   const { Kakao } = window;
   const history = useHistory();
+  const loginState = useContext(LoginState);
 
   const handleKakaoLogin = () => {
     Kakao.Auth.login({
       success: function (response) {
-        fetch(`http://10.58.2.171:8000/users/kakaologin`, {
+        fetch(`http://10.58.1.2:8000/users/kakaologin`, {
           headers: {
             Authorization: response.access_token,
           },
           method: 'POST',
-          body: JSON.stringify({ access_token: response.access_token }),
+          body: JSON.stringify({
+            access_token: response.access_token,
+          }),
         })
           .then(res => res.json())
-          .then(res => {});
+          .then(res => {
+            localStorage.setItem('kakao_token', res.token);
+            if (res.token) {
+              history.push('/');
+              loginState.setIsLogin(true);
+              alert('로그인 성공');
+            }
+          });
       },
       fail: function (err) {
         alert(JSON.stringify(err));
