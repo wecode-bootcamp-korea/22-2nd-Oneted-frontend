@@ -6,6 +6,7 @@ import FilterButton from './FilterButton/FilterButton';
 import OrderBy from './OrderBy/OrderBy';
 import MainSlider from './MainSlider/MainSlider';
 import PostList from './PostList/PostList';
+import RegionButton from './RegionButton/RegionButton';
 
 function Main() {
   //postList 데이터로 쓰일 state
@@ -34,6 +35,10 @@ function Main() {
     setOrderByFetch(name);
   };
 
+  const regionFetchHandler = region => {
+    setRegionFetch(region);
+  };
+
   const makeQuery = state => {
     const query = state.reduce((acc, cv) => {
       if (!acc && cv) {
@@ -56,6 +61,10 @@ function Main() {
           description="딱맞는 기업 찾기"
           tagFetchHandler={tagFetchHandler}
           tagFetchData={tagFetchData}
+        />
+        <RegionButton
+          title={regionFetch === '' ? '전체' : regionFetch}
+          regionFetchHandler={regionFetchHandler}
         />
         <OrderBy orderByFetchHandler={orderByFetchHandler} />
       </FilterContainer>
