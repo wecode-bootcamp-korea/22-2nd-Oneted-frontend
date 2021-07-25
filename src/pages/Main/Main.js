@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import FilterButton from './FilterButton/FilterButton';
 import OrderBy from './OrderBy/OrderBy';
 import PostList from './PostList/PostList';
+import RegionButton from './RegionButton/RegionButton';
 
 function Main(props) {
   //postList 데이터로 쓰일 state
@@ -33,6 +34,10 @@ function Main(props) {
     setOrderByFetch(name);
   };
 
+  const regionFetchHandler = region => {
+    setRegionFetch(region);
+  };
+
   const makeQuery = state => {
     const query = state.reduce((acc, cv) => {
       if (!acc && cv) {
@@ -54,6 +59,10 @@ function Main(props) {
           description="딱맞는 기업 찾기"
           tagFetchHandler={tagFetchHandler}
           tagFetchData={tagFetchData}
+        />
+        <RegionButton
+          title={regionFetch === '' ? '전체' : regionFetch}
+          regionFetchHandler={regionFetchHandler}
         />
         <OrderBy orderByFetchHandler={orderByFetchHandler} />
       </FilterContainer>
