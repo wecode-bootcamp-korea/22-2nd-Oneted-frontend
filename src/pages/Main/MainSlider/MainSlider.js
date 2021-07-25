@@ -10,8 +10,8 @@ function MainSlider() {
   return (
     <>
       <Swiper navigation {...settings}>
-        {SLIDE_IMAGE.map(image => (
-          <SwiperSlide>
+        {SLIDE_IMAGE.map((image, index) => (
+          <SwiperSlide key={index}>
             <Slide url={image.url} />
           </SwiperSlide>
         ))}

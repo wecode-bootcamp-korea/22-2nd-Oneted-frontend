@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import LoginModal from '../Modal/LoginModal';
@@ -31,10 +32,15 @@ const Nav = () => {
           <h1>wanted</h1>
         </div>
         <NavCategory>
-          <li>탐색</li>
-          <li>커리어 성장</li>
-          <li>직군별 연봉</li>
-          <li>이력서</li>
+          <Link to="/">
+            <li>탐색</li>
+          </Link>
+          <Link to="/salary">
+            <li>직군별 연봉</li>
+          </Link>
+          <Link to="resume">
+            <li>이력서</li>
+          </Link>
         </NavCategory>
         <aside>
           <AsideNav>
@@ -65,11 +71,12 @@ const Section = styled.section`
   width: 100%;
   border-bottom: 1px solid black;
   background-color: white;
+  z-index: 9999;
 `;
 
 const Container = styled.div`
   ${({ theme }) => theme.setFlex('space-around')}
-  width: 1398px;
+  width: 100vw;
   height: 50px;
   margin: auto;
 

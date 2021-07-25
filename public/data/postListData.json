@@ -1,5 +1,6 @@
 [
   {
+    "id": 1,
     "img": "https://static.wanted.co.kr/images/company/79/nao0wpcuig9g5ntu__1080_790.jpg",
     "title": "개발자 채용",
     "company": "wecode",
@@ -7,6 +8,7 @@
     "reward": "채용보상금 1,000,000원"
   },
   {
+    "id": 2,
     "img": "https://static.wanted.co.kr/images/company/79/nao0wpcuig9g5ntu__1080_790.jpg",
     "title": "개발자 채용",
     "company": "wecode",
@@ -14,6 +16,7 @@
     "reward": "채용보상금 1,000,000원"
   },
   {
+    "id": 3,
     "img": "https://static.wanted.co.kr/images/company/79/nao0wpcuig9g5ntu__1080_790.jpg",
     "title": "개발자 채용",
     "company": "wecode",
@@ -21,6 +24,7 @@
     "reward": "채용보상금 1,000,000원"
   },
   {
+    "id": 4,
     "img": "https://static.wanted.co.kr/images/company/79/nao0wpcuig9g5ntu__1080_790.jpg",
     "title": "개발자 채용",
     "company": "wecode",
@@ -28,6 +32,7 @@
     "reward": "채용보상금 1,000,000원"
   },
   {
+    "id": 5,
     "img": "https://static.wanted.co.kr/images/company/79/nao0wpcuig9g5ntu__1080_790.jpg",
     "title": "개발자 채용",
     "company": "wecode",
@@ -35,6 +40,7 @@
     "reward": "채용보상금 1,000,000원"
   },
   {
+    "id": 6,
     "img": "https://static.wanted.co.kr/images/company/79/nao0wpcuig9g5ntu__1080_790.jpg",
     "title": "개발자 채용",
     "company": "wecode",
@@ -42,6 +48,7 @@
     "reward": "채용보상금 1,000,000원"
   },
   {
+    "id": 7,
     "img": "https://static.wanted.co.kr/images/company/79/nao0wpcuig9g5ntu__1080_790.jpg",
     "title": "개발자 채용",
     "company": "wecode",
@@ -49,6 +56,7 @@
     "reward": "채용보상금 1,000,000원"
   },
   {
+    "id": 8,
     "img": "https://static.wanted.co.kr/images/company/79/nao0wpcuig9g5ntu__1080_790.jpg",
     "title": "개발자 채용",
     "company": "wecode",
@@ -56,6 +64,7 @@
     "reward": "채용보상금 1,000,000원"
   },
   {
+    "id": 9,
     "img": "https://static.wanted.co.kr/images/company/79/nao0wpcuig9g5ntu__1080_790.jpg",
     "title": "개발자 채용",
     "company": "wecode",
@@ -63,6 +72,7 @@
     "reward": "채용보상금 1,000,000원"
   },
   {
+    "id": 10,
     "img": "https://static.wanted.co.kr/images/company/79/nao0wpcuig9g5ntu__1080_790.jpg",
     "title": "개발자 채용",
     "company": "wecode",
@@ -70,6 +80,7 @@
     "reward": "채용보상금 1,000,000원"
   },
   {
+    "id": 11,
     "img": "https://static.wanted.co.kr/images/company/79/nao0wpcuig9g5ntu__1080_790.jpg",
     "title": "개발자 채용",
     "company": "wecode",
@@ -77,6 +88,7 @@
     "reward": "채용보상금 1,000,000원"
   },
   {
+    "id": 12,
     "img": "https://static.wanted.co.kr/images/company/79/nao0wpcuig9g5ntu__1080_790.jpg",
     "title": "개발자 채용",
     "company": "wecode",
@@ -84,6 +96,7 @@
     "reward": "채용보상금 1,000,000원"
   },
   {
+    "id": 13,
     "img": "https://static.wanted.co.kr/images/company/79/nao0wpcuig9g5ntu__1080_790.jpg",
     "title": "개발자 채용",
     "company": "wecode",
@@ -91,6 +104,7 @@
     "reward": "채용보상금 1,000,000원"
   },
   {
+    "id": 14,
     "img": "https://static.wanted.co.kr/images/company/79/nao0wpcuig9g5ntu__1080_790.jpg",
     "title": "개발자 채용",
     "company": "wecode",
@@ -98,6 +112,7 @@
     "reward": "채용보상금 1,000,000원"
   },
   {
+    "id": 15,
     "img": "https://static.wanted.co.kr/images/company/79/nao0wpcuig9g5ntu__1080_790.jpg",
     "title": "개발자 채용",
     "company": "wecode",
@@ -105,6 +120,39 @@
     "reward": "채용보상금 1,000,000원"
   },
   {
+    "id": 16,
+    "img": "https://static.wanted.co.kr/images/company/79/nao0wpcuig9g5ntu__1080_790.jpg",
+    "title": "개발자 채용",
+    "company": "wecode",
+    "location": "서울",
+    "reward": "채용보상금 1,000,000원"
+  },
+  {
+    "id": 17,
+    "img": "https://static.wanted.co.kr/images/company/79/nao0wpcuig9g5ntu__1080_790.jpg",
+    "title": "개발자 채용",
+    "company": "wecode",
+    "location": "서울",
+    "reward": "채용보상금 1,000,000원"
+  },
+  {
+    "id": 18,
+    "img": "https://static.wanted.co.kr/images/company/79/nao0wpcuig9g5ntu__1080_790.jpg",
+    "title": "개발자 채용",
+    "company": "wecode",
+    "location": "서울",
+    "reward": "채용보상금 1,000,000원"
+  },
+  {
+    "id": 19,
+    "img": "https://static.wanted.co.kr/images/company/79/nao0wpcuig9g5ntu__1080_790.jpg",
+    "title": "개발자 채용",
+    "company": "wecode",
+    "location": "서울",
+    "reward": "채용보상금 1,000,000원"
+  },
+  {
+    "id": 20,
     "img": "https://static.wanted.co.kr/images/company/79/nao0wpcuig9g5ntu__1080_790.jpg",
     "title": "개발자 채용",
     "company": "wecode",
