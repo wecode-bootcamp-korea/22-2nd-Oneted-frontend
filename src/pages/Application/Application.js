@@ -1,7 +1,31 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+
+import { API } from '../../config';
+
 import styled from 'styled-components';
 
+import PostList from './PostList/PostList';
+
 function Application() {
+  const [applicationCount, setApplicationCount] = useState([]);
+  const [userApplication, setUserApplication] = useState([]);
+
+  useEffect(() => {
+    setApplicationCount(APPLICATION_DATA);
+  }, []);
+
+  useEffect(() => {
+    fetch(`${API.RESUME}`, {
+      headers: {
+        Authorization: localStorage.getItem('kakao_token'),
+      },
+    })
+      .then(res => res.json())
+      .then(datas => {
+        setUserApplication(datas.result);
+      });
+  }, []);
+
   return (
     <Container>
       <Aside>
@@ -32,7 +56,7 @@ function Application() {
       </Aside>
       <Wraper>
         <CountBoxWraper>
-          {APPLICATION_DATA.map((data, index) => (
+          {applicationCount.map((data, index) => (
             <CountBox key={index} index={index}>
               <p>{data.count}</p>
               <span>{data.name}</span>
@@ -45,10 +69,14 @@ function Application() {
         <SearchResult>
           <Info />
           <ListBox>
-            <EmptyBox>
-              <i className="fas fa-search"></i>
-              <p>요청하신 결과가 없습니다.</p>
-            </EmptyBox>
+            {userApplication.length ? (
+              <PostList data={userApplication} />
+            ) : (
+              <EmptyBox>
+                <i className="fas fa-search"></i>
+                <p>요청하신 결과가 없습니다.</p>
+              </EmptyBox>
+            )}
           </ListBox>
         </SearchResult>
       </Wraper>

@@ -25,7 +25,7 @@ function LoginModal(props) {
             localStorage.setItem('kakao_token', res.token);
             if (res.token) {
               history.push('/');
-              loginState.setIsLogin(true);
+              loginState.setIsLoginOn(true);
               alert('로그인 성공');
             }
           });

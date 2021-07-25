@@ -66,11 +66,9 @@ function Modal({ title, handleModal, tagFetchHandler }) {
   };
 
   const tagListCount = () => {
-    return filterCategories.selected
-      ? filterCategories
-          .map(setList => setList.selected.length)
-          .reduce((a, b) => a + b, null)
-      : '';
+    return filterCategories
+      .map(setList => setList.selected.length)
+      .reduce((a, b) => a + b, null);
   };
 
   const pickTagHandler = (id, tagName, multiple) => {
@@ -104,7 +102,6 @@ function Modal({ title, handleModal, tagFetchHandler }) {
     tagFetchHandler(makeTagQuery());
     handleModal();
   };
-
   return (
     filterCategories.length > 1 && (
       <ModalBackgournd>

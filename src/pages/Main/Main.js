@@ -1,29 +1,33 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 import styled from 'styled-components';
 
 import FilterButton from './FilterButton/FilterButton';
 import OrderBy from './OrderBy/OrderBy';
-import MainSlider from './MainSlider/MainSlider';
 import PostList from './PostList/PostList';
 import RegionButton from './RegionButton/RegionButton';
 
 function Main() {
-  //postList 데이터로 쓰일 state
   const [postListData, setpostListData] = useState([]);
-  //tag Fetch에 쓰일 state
   const [tagFetchData, settagFetchData] = useState([]);
-  //지역 Fetch에 쓰일 state
   const [regionFetch, setRegionFetch] = useState('');
-  //최신순 등 Fetch에 쓰일 state
   const [orderByFetch, setOrderByFetch] = useState('latest');
+  const [isLoading, setIsLoading] = useState(true);
 
-  //postListData Fetch
+  const listCount = useRef(0);
+  const offsetNumberRef = useRef(0);
+  const fetchTarget = useRef(null);
+
   useEffect(() => {
-    fetch(`http://54.180.99.36:8000/search?${makeQuery(tagFetchData)}`)
+    fetch(
+      `http://54.180.99.36:8000/jobpostings?${makeQuery(
+        tagFetchData
+      )}&offset=0&limit=20`
+    )
       .then(res => res.json())
       .then(data => {
-        setpostListData(data.result.jobPostings);
+        setpostListData(data.result);
+        listCount.current = data.count;
       });
   }, [tagFetchData, regionFetch, orderByFetch]);
 
@@ -52,23 +56,63 @@ function Main() {
     return query + '&region=' + regionFetch + '&orderBy=' + orderByFetch;
   };
 
+  const onIntersect = ([entry]) => {
+    offsetNumberRef.current = offsetNumberRef.current + 20;
+    console.log(`postListData`, postListData);
+    if (entry.isIntersecting) {
+      fetch(
+        `http://54.180.99.36:8000/jobpostings?&offset=${offsetNumberRef.current}&limit=20`
+      )
+        .then(res => res.json())
+        .then(data => {
+          setpostListData(prev => [...prev, ...data.result]);
+          listCount.current = data.count;
+          console.log(`data.result`, data.result);
+        });
+    }
+  };
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(onIntersect, { threshold: 0.5 });
+    observer.observe(fetchTarget.current);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (listCount.current < offsetNumberRef.current) setIsLoading(false);
+  }, [postListData]);
+
+  const gotoTopHandler = () => {
+    window.scrollTo({
+      top: 400,
+      behavior: 'smooth',
+    });
+  };
+
   return (
     <main>
-      <MainSlider />
       <FilterContainer>
-        <FilterButton
-          title="태그"
-          description="딱맞는 기업 찾기"
-          tagFetchHandler={tagFetchHandler}
-          tagFetchData={tagFetchData}
-        />
-        <RegionButton
-          title={regionFetch === '' ? '전체' : regionFetch}
-          regionFetchHandler={regionFetchHandler}
-        />
-        <OrderBy orderByFetchHandler={orderByFetchHandler} />
+        <LeftFilterButtonWrap>
+          <FilterButton
+            title="태그"
+            description="딱맞는 기업 찾기"
+            tagFetchHandler={tagFetchHandler}
+            tagFetchData={tagFetchData}
+          />
+        </LeftFilterButtonWrap>
+        <RightFilterButtonWrap>
+          <RegionButton
+            title={regionFetch === '' ? '전체' : regionFetch}
+            regionFetchHandler={regionFetchHandler}
+          />
+          <OrderBy orderByFetchHandler={orderByFetchHandler} />
+        </RightFilterButtonWrap>
       </FilterContainer>
       <PostList data={postListData} />
+      {isLoading && <Loading ref={fetchTarget}> Loading...</Loading>}
+      <GotoTop onClick={gotoTopHandler}>
+        <i className="fas fa-arrow-alt-circle-up" />
+      </GotoTop>
     </main>
   );
 }
@@ -79,6 +123,37 @@ const FilterContainer = styled.div`
   ${({ theme }) => theme.setFlex('space-between', 'none')};
   width: 1100px;
   margin: 0 auto;
-  padding-top: 100px;
+  padding-top: 55px;
+  margin-bottom: 50px;
   max-height: 40px;
+`;
+
+const LeftFilterButtonWrap = styled.div`
+  flex: 4;
+`;
+
+const RightFilterButtonWrap = styled.div`
+  display: flex;
+  justify-content: space-between;
+  flex: 1;
+`;
+
+const Loading = styled.div`
+  ${({ theme }) => theme.setFlex()}
+`;
+
+const GotoTop = styled.button`
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  margin-right: 20px;
+  margin-bottom: 10px;
+  background: inherit;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  padding: 0;
+  overflow: visible;
+  cursor: pointer;
+  font-size: 40px;
 `;

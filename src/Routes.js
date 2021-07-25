@@ -8,6 +8,7 @@ import Resume from './pages/Resume/Resume';
 import ResumeForm from './pages/Resume/ResumeForm';
 import SearchResult from './pages/SearchResult/SearchResult';
 import Salary from './pages/Salary/Salary';
+import Application from './pages/Application/Application';
 
 class Routes extends Component {
   render() {
@@ -23,6 +24,7 @@ class Routes extends Component {
           <Route exact path="/search" component={SearchResult} />
           <Route exact path="/tag-search" component={SearchResult} />
           <Route exact path="/salary" component={Salary} />
+          <Route exact path="/application" component={Application} />
         </Switch>
       </Router>
     );
