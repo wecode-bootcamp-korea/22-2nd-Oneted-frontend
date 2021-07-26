@@ -1,9 +1,21 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import ResumeButton from './ResumeButton';
 
 function Resume() {
+  const [resumeData, setResumeData] = useState([]);
+
+  useEffect(() => {
+    fetch('http://54.180.99.36:8000/resumes')
+      .then(res => res.json())
+      .then(datas => {
+        setResumeData(datas.result);
+      });
+  }, []);
+
   return (
-    <main>
+    <Body>
       <ResumeContainer>
         <ResumeHeader>
           <h4>최근 문서</h4>
@@ -13,9 +25,11 @@ function Resume() {
           <ResumeBox>
             <button>
               <Wrapper>
-                <WriteBackground>
-                  <i className="far fa-copy" />
-                </WriteBackground>
+                <Link to="/resume-form">
+                  <WriteBackground>
+                    <i className="far fa-copy" />
+                  </WriteBackground>
+                </Link>
                 <p>새 이력서 작성</p>
               </Wrapper>
             </button>
@@ -24,19 +38,30 @@ function Resume() {
             <button>
               <Wrapper>
                 <UploadBackground>
-                  <i className="fas fa-file-upload"></i>
+                  <i className="fas fa-file-upload" />
                 </UploadBackground>
                 <p>파일 업로드</p>
               </Wrapper>
             </button>
           </ResumeBox>
+          {resumeData.map(resume => (
+            <ResumeButton
+              key={resume.id}
+              resume={resume}
+              setResumeData={setResumeData}
+              resumeData={resumeData}
+            />
+          ))}
         </ContentWrapper>
       </ResumeContainer>
-    </main>
+    </Body>
   );
 }
 export default Resume;
 
+const Body = styled.main`
+  background-color: rgb(248, 248, 250);
+`;
 const ResumeContainer = styled.section`
   margin: 50px 126px 0 126px;
 `;
@@ -50,6 +75,8 @@ const ResumeHeader = styled.div`
 
 const ContentWrapper = styled.div`
   display: flex;
+  flex-wrap: wrap;
+  max-width: 2000px;
 `;
 
 const ResumeBox = styled.div`

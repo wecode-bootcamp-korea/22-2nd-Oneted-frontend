@@ -19,6 +19,7 @@ class Routes extends Component {
           <Route exact path="/detail" component={Detail} />
           <Route exact path="/resume" component={Resume} />
           <Route exact path="/resume-form" component={ResumeForm} />
+          <Route exact path="/resume-form/:id" component={ResumeForm} />
           <Route exact path="/search" component={SearchResult} />
         </Switch>
       </Router>

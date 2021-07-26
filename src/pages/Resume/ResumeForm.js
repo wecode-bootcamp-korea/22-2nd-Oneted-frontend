@@ -1,41 +1,98 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
 import styled from 'styled-components';
+import { useHistory, useParams } from 'react-router-dom';
 
 function ResumeForm() {
-  const [inputTextData, setInputTextData] = useState({
-    intro: '',
-    career: '',
-    education: '',
-    skills: '',
-  });
+  const { id } = useParams();
+  const [resumeData, setResumeData] = useState({});
+  const [userInfo, setUserInfo] = useState([]);
+  const [isDone, setIsDone] = useState(false);
 
-  const sumOfCharacters = Object.values(inputTextData).reduce(
-    (sum, cur) => sum + cur.length,
-    0
-  );
+  const history = useHistory();
+
+  useEffect(() => {
+    if (id) {
+      fetch(`http://54.180.99.36:8000/resumes/${id}`)
+        .then(res => res.json())
+        .then(resume => setResumeData(resume.result));
+    } else {
+      fetch(`http://54.180.99.36:8000/users/info`)
+        .then(res => res.json())
+        .then(userInfo => setUserInfo(userInfo.result));
+    }
+  }, [id]);
+
+  let sumOfCharacters = 0;
+  if (resumeData.content) {
+    sumOfCharacters = Object.values(resumeData.content).reduce(
+      (sum, cur) => sum + cur.length,
+      0
+    );
+  } else {
+    sumOfCharacters = 0;
+  }
 
   const handleOnchange = e => {
-    setInputTextData({
-      ...inputTextData,
-      [e.target.name]: e.target.value,
+    setResumeData({
+      ...resumeData,
+      content: {
+        ...resumeData.content,
+        [e.target.name]: e.target.value,
+      },
     });
+
+    if (sumOfCharacters > 400) {
+      setIsDone(true);
+    } else {
+      setIsDone(false);
+    }
   };
 
   const generatePDF = () => {
     html2canvas(document.querySelector('#main')).then(canvas => {
       const doc = new jsPDF('p', 'pt', 'a4');
-      window.scrollTo(
-        0,
-        document.body.scrollHeight || document.documentElement.scrollHeight
-      );
+
       const imgData = canvas.toDataURL('image/png');
 
       doc.addImage(imgData, 'PNG', 30, 30, 700, 700);
       doc.save('sample.pdf');
     });
+  };
+
+  const fetchFunction = (apiAdress, method, message) => {
+    fetch(apiAdress, {
+      method: method,
+      body: JSON.stringify({
+        title: resumeData.title ? resumeData.title : userInfo.name,
+        description: resumeData.content.description,
+        career: resumeData.content.career,
+        education: resumeData.content.education,
+        skill: resumeData.content.skill,
+        isDone: isDone,
+      }),
+    })
+      .then(res => res.json())
+      .then(result => {
+        if (result.message === 'SUCCESS') {
+          alert(message);
+          history.push('/resume');
+        }
+      });
+  };
+
+  const submitResume = () => {
+    if (!id) {
+      fetchFunction('http://54.180.99.36:8000/resumes', 'POST', '수정 완료');
+    } else {
+      fetchFunction(
+        `http://54.180.99.36:8000/resumes/${id}`,
+        'PATCH',
+        '작성 완료'
+      );
+    }
   };
 
   return (
@@ -50,10 +107,12 @@ function ResumeForm() {
         </Header>
       </div>
       <Main id="main">
-        <h1>PARK</h1>
+        <h1 id="title">
+          {resumeData.title ? resumeData.title : userInfo.name}
+        </h1>
         <div>
-          <p>이름</p>
-          <p>메일</p>
+          <p>{resumeData.user ? resumeData.user.name : userInfo.name}</p>
+          <p>{resumeData.user ? resumeData.user.email : userInfo.email}</p>
         </div>
         <Section>
           {DESCRIPTION.map(description => {
@@ -61,15 +120,16 @@ function ResumeForm() {
               <>
                 <header>{description.title}</header>
                 <ul>
-                  {description.desc.map(descList => (
+                  {description.content?.desc.map(descList => (
                     <li>{descList}</li>
                   ))}
                 </ul>
+
                 <textarea
                   onChange={handleOnchange}
                   name={description.name}
                   type="text"
-                  value={inputTextData.name}
+                  value={resumeData.content?.[description.name]}
                   placeholder={description.placeholder}
                 />
               </>
@@ -100,7 +160,7 @@ function ResumeForm() {
               <SaveBtn>
                 <span>임시 저장</span>
               </SaveBtn>
-              <CompleteBtn>
+              <CompleteBtn onClick={submitResume}>
                 <span>작성 완료</span>
               </CompleteBtn>
             </BtnWrapper>
@@ -115,7 +175,7 @@ export default ResumeForm;
 const DESCRIPTION = [
   {
     title: '간단 소개글',
-    name: 'intro',
+    name: 'description',
     desc: [
       '- 본인의 업무 경험을 기반으로 핵심역량과 업무 스킬을 간단히 작성해주세요.',
       '- 3~5줄로 요약하여 작성하는 것을 추천합니다!',
@@ -141,7 +201,7 @@ const DESCRIPTION = [
   },
   {
     title: '스킬',
-    name: 'skills',
+    name: 'skill',
     desc: [
       '- 개발 스택, 디자인 툴, 마케팅 툴 등 가지고 있는 직무와 관련된 스킬을 추가해보세요.',
       '- 데이터 분석 툴이나 협업 툴 등의 사용해본 경험이 있으신 툴들도 추가해보세요.',
@@ -258,8 +318,7 @@ const Progressbar = styled.div`
 const Graph = styled.div`
   height: 9px;
   width: ${props => `${props.count * 0.3}px`};
-
-  background-color: #333333;
+  background-color: ${props => `${props.count > 400 ? 'blue' : 'black'}`};
 `;
 
 const BtnWrapper = styled.div`
