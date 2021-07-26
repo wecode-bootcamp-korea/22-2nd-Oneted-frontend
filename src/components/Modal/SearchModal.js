@@ -5,21 +5,30 @@ import SearchListModal from './SearchListModal';
 import TagModal from './TagModal';
 
 function SearchModal({ clickSearch }) {
-  const [isTag, setIsTag] = useState(true);
   const [text, setText] = useState('');
   const history = useHistory();
+  const [postingInfo, setPostingInfo] = useState([]);
+  const [searchText, setSearchText] = useState('');
+
+  useEffect(() => {
+    fetch('/data/postListData.json')
+      .then(res => res.json())
+      .then(result => setPostingInfo(result));
+  }, [searchText]);
 
   const clickInput = e => {
     e.stopPropagation();
   };
 
   const handleChange = e => {
-    setText(e.target.value);
+    if (e.target.value !== '') {
+      setSearchText(e.target.value);
+    }
   };
 
   const handleKeyEvent = e => {
     if (e.key === 'Enter') {
-      history.push(`/search?query=${text}`);
+      history.push(`/search?query=${searchText}`);
       clickSearch();
       e.preventDefault();
     }
@@ -41,7 +50,11 @@ function SearchModal({ clickSearch }) {
               <i className="fas fa-search" />
             </div>
           </form>
-          {text ? <SearchListModal /> : <TagModal />}
+          {searchText ? (
+            <SearchListModal datas={postingInfo} searchText={searchText} />
+          ) : (
+            <TagModal />
+          )}
         </Wrapper>
       </SearchContainer>
     </Dimmer>
@@ -68,7 +81,6 @@ const SearchContainer = styled.section`
 
 const Wrapper = styled.div`
   padding: 30px 0 100px 0;
-  margin: 0 166px 0 166px;
 
   form {
     display: flex;
