@@ -1,19 +1,25 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
+import { API } from '../../config';
 import SearchListModal from './SearchListModal';
 import TagModal from './TagModal';
 
 function SearchModal({ clickSearch }) {
-  const [text, setText] = useState('');
-  const history = useHistory();
   const [postingInfo, setPostingInfo] = useState([]);
   const [searchText, setSearchText] = useState('');
+  const timerRef = useRef(undefined);
+  const history = useHistory();
 
   useEffect(() => {
-    fetch('/data/postListData.json')
-      .then(res => res.json())
-      .then(result => setPostingInfo(result));
+    if (timerRef.current > 0) {
+      clearTimeout(timerRef.current);
+    }
+    timerRef.current = setTimeout(() => {
+      fetch(`${API.AUTO_SEARCH}?query=${searchText}`)
+        .then(res => res.json())
+        .then(result => setPostingInfo(result.result));
+    }, 400);
   }, [searchText]);
 
   const clickInput = e => {
@@ -51,7 +57,10 @@ function SearchModal({ clickSearch }) {
             </div>
           </form>
           {searchText ? (
-            <SearchListModal datas={postingInfo} searchText={searchText} />
+            <SearchListModal
+              postingInfo={postingInfo}
+              searchText={searchText}
+            />
           ) : (
             <TagModal />
           )}
