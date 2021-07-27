@@ -1,55 +1,77 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useParams } from 'react';
 import styled from 'styled-components';
 import ModalShare from './Modal/ModalShare';
-
-const Options = {
-  center: new window.kakao.maps.LatLng(37.5063, 127.05367),
-  level: 2,
-};
+import ModalApply from './Modal/ModalApply/ModalApply';
+import { BASE_URL } from '../../config';
 
 const Detail = () => {
-  const [jobData, setJobData] = useState({});
+  const [jobPostingInfo, setJobPostingInfo] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalApplyOpen, setIsModalApplyOpen] = useState(false);
   const [bookmarkText, setBookmarkText] = useState('북마크하기');
   const KakaoMapContainer = useRef();
 
+  const latitude = jobPostingInfo.company_info?.coordinate.latitude;
+  const longitude = jobPostingInfo.company_info?.coordinate.longitude;
+
+  const Options = {
+    center: new window.kakao.maps.LatLng(latitude, longitude),
+    level: 2,
+  };
+
   useEffect(() => {
-    fetch('data/data.json')
+    fetch(`${BASE_URL}/jobpostings/1`)
       .then(res => res.json())
-      .then(jobData => {
-        setJobData(jobData);
+      .then(data => {
+        setJobPostingInfo(data.result);
       });
   }, []);
 
   useEffect(() => {
     const marker = new window.kakao.maps.Marker({
-      position: new window.kakao.maps.LatLng(37.5063, 127.05367),
+      position: new window.kakao.maps.LatLng(latitude, longitude),
     });
 
     marker.setMap(
       new window.kakao.maps.Map(KakaoMapContainer.current, Options)
     );
-  }, []);
+  }, [latitude, longitude]);
 
   const closeModal = () => {
     setIsModalOpen(false);
+    setIsModalApplyOpen(false);
   };
 
   const handleBookmark = () => {
-    fetch('URL', {
+    fetch(`${BASE_URL}/jobpostings/1/bookmark`, {
       headers: {
-        Authorization: localStorage.getItem('token'),
+        Authorization: localStorage.getItem('access_token'),
       },
     })
       .then(res => res.json())
       .then(res => {
-        if (bookmarkText === '북마크하기' && res.token === 'token') {
+        if (res['message'] === 'SUCCESS') {
           setBookmarkText('북마크 완료');
           alert('북마크 완료');
-        } else if (bookmarkText === '북마크하기' && res.token !== null) {
+        } else {
           alert('로그인 해주세요');
         }
       });
+  };
+
+  const handleModalApply = () => {
+    setIsModalApplyOpen(true);
+  };
+
+  const lineChange = data => {
+    return data.split('\n').map(text => {
+      return (
+        <span>
+          {text}
+          <br />
+        </span>
+      );
+    });
   };
 
   return (
@@ -62,30 +84,45 @@ const Detail = () => {
           />
           <ArticleDetail>
             <ArticleTop>
-              <h1>CRM 데이터 분석 (2년 이상)</h1>
-              <h2>{jobData.job_posting_info?.company}</h2>
-              <HashTag>#연봉최고</HashTag>
+              <h1>{jobPostingInfo?.job_posting_title}</h1>
+              <h2>{jobPostingInfo.company_info?.company_name}</h2>
+              <TagContainer>
+                {jobPostingInfo.tag_info?.map(tag => {
+                  return <HashTag>{tag}</HashTag>;
+                })}
+              </TagContainer>
             </ArticleTop>
-            <p>
-              「에이블리」는 누적 다운로드 2,200만건, 누적 거래액 7,500억, 패션
-              앱 사용자수 1위, 앱스토어 1위를 달성하며 업계에서 가장 빠르게
-              성장하고 있는 패션/뷰티 쇼핑앱이에요. 성장성과 IT 기술력을
-              인정받아 시리즈 B 투자유치를 완료하였고, 예비유니콘에
-              선정되었어요. 국내에서 가장 잘하는 팀인지는 모르겠지만, 가장
-              몰입해서 치열하게 일하는 팀 중에 하나일 것이라는 자신감이 있어요.
-            </p>
-            <Map>
-              <MapTitle>마감일</MapTitle>
-              <MapText>상시</MapText>
-            </Map>
-            <Map>
-              <MapTitle>근무지역</MapTitle>
-              <MapText>서울특별시 강남구 테헤란로 427 위워크 빌딩</MapText>
-            </Map>
+            <CompanyDescription>
+              {jobPostingInfo.description &&
+                lineChange(jobPostingInfo.description.benefit)}
+
+              {jobPostingInfo.description &&
+                lineChange(jobPostingInfo.description.intro)}
+
+              {jobPostingInfo.description &&
+                lineChange(jobPostingInfo.description.main_task)}
+
+              {jobPostingInfo.description &&
+                lineChange(jobPostingInfo.description.preference_point)}
+
+              {jobPostingInfo.description &&
+                lineChange(jobPostingInfo.description.requirements)}
+            </CompanyDescription>
+            <MapTextContainer>
+              <Map>
+                <MapTitle>마감일</MapTitle>
+                <MapText>상시</MapText>
+              </Map>
+              <Map>
+                <MapTitle>근무지역</MapTitle>
+                <MapText>서울특별시 강남구 테헤란로 427 위워크 빌딩</MapText>
+              </Map>
+            </MapTextContainer>
             <KakaoMap ref={KakaoMapContainer} />
           </ArticleDetail>
         </Article>
       </ArticleBox>
+      {isModalApplyOpen && <ModalApply closeModal={closeModal} />}
       <Aside>
         <BtnShareContainer>
           <BtnShare
@@ -93,7 +130,7 @@ const Detail = () => {
               setIsModalOpen(true);
             }}
             alt="icon_share"
-            src={'images/icon_share.svg'}
+            src="/images/icon_share.svg"
           />
         </BtnShareContainer>
         {isModalOpen && <ModalShare closeModal={closeModal} />}
@@ -108,9 +145,8 @@ const Detail = () => {
             <p>500,000원</p>
           </li>
         </ul>
-        {/* <ModalBookmark /> */}
         <BookmarkBtn onClick={handleBookmark}>{bookmarkText}</BookmarkBtn>
-        <SupportBtn>지원하기</SupportBtn>
+        <SupportBtn onClick={handleModalApply}>지원하기</SupportBtn>
       </Aside>
     </Container>
   );
@@ -121,7 +157,7 @@ const Container = styled.div`
   margin: 70px auto;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   line-height: 1.2;
-  ${({ theme }) => theme.setFlex('center', 'none')}
+  ${({ theme }) => theme.setFlex('center', 'stretch')}
 `;
 
 const ArticleBox = styled.section`
@@ -145,8 +181,7 @@ const ArticleDetail = styled.article`
   color: ${({ theme }) => theme.onetedBlack};
 
   p {
-    padding-bottom: 60px;
-    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 30px;
     line-height: 1.8;
   }
 `;
@@ -175,6 +210,10 @@ const Aside = styled.aside`
   }
 `;
 
+const CompanyDescription = styled.div`
+  line-height: 1.6;
+`;
+
 const AsideTitle = styled.p`
   font-weight: 600;
 `;
@@ -194,6 +233,10 @@ const BookmarkBtn = styled.button`
   &:hover {
     cursor: pointer;
   }
+`;
+
+const TagContainer = styled.div`
+  margin-bottom: 40px;
 `;
 
 const SupportBtn = styled(BookmarkBtn)`
@@ -232,6 +275,10 @@ const ArticleTop = styled.div`
     font-size: 14px;
     font-weight: 600;
   }
+`;
+const MapTextContainer = styled.div`
+  margin-top: 40px;
+  border-top: 1px solid #f0f0f0;
 `;
 
 const Map = styled.div`

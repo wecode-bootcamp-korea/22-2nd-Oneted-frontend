@@ -1,29 +1,55 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router';
 import styled from 'styled-components';
+import UploadFileList from './UploadFileList/UploadFileList';
 
 const ModalApply = props => {
-  const [addFile, setAddFile] = useState('');
-  const [uploadValue, setValue] = useState('');
+  const [addFile, setAddFile] = useState([]);
+  const [disabled, setDisabled] = useState(true);
+  const history = useHistory();
+
+  useEffect(() => {
+    const result = addFile.filter(el => el.checked === true);
+
+    result.length > 0 ? setDisabled(false) : setDisabled(true);
+  }, [addFile]);
 
   const onInputChange = e => {
-    setAddFile([...addFile, ...e.target.files]);
-    setValue(e.target.value);
+    const newFile = [...addFile];
+    for (let i = 0; i < e.target.files.length; i++) {
+      newFile.push({ file: e.target.files[i], checked: false });
+    }
+    setAddFile(newFile);
+  };
+
+  const checkHandle = (e, idx) => {
+    const arr = [...addFile];
+    const checkedPoint = { file: arr[idx].file, checked: !arr[idx].checked };
+    arr[idx] = checkedPoint;
+
+    setAddFile(arr);
   };
 
   const onSubmit = e => {
-    e.preventDefault();
     const formData = new FormData();
+    e.preventDefault();
 
     for (let i = 0; i < addFile.length; i++) {
-      formData.append('file', addFile[i]);
+      if (addFile[i].checked) {
+        formData.append('file', addFile[i].file);
+      }
     }
 
-    fetch('http://10.58.6.154:8000/resumes/file', {
+    fetch('http://10.58.3.209:8000/resumes/file', {
       method: 'POST',
       body: formData,
     })
       .then(res => res.json())
-      .then(res => console.log('업로드 성공', res));
+      .then(res => {
+        if (res['message'] === 'SUCCESS') {
+          alert('제출완료');
+        }
+      });
   };
 
   return (
@@ -47,33 +73,36 @@ const ModalApply = props => {
           <div>
             <SubmitTextBottom>첨부파일</SubmitTextBottom>
           </div>
-          <form encType="multipart/form-data" onSubmit={onSubmit}>
+          <form onSubmit={onSubmit} encType="multipart/form-data">
             <div>
-              {uploadValue &&
-                addFile.map(file => {
+              {addFile &&
+                addFile.map((file, idx) => {
                   return (
-                    <UploadList>
-                      <span>V</span>
-                      <div>{file.name}</div>
-                      <p>date</p>
-                      <p>첨부파일</p>
-                    </UploadList>
+                    <div>
+                      <UploadFileList
+                        idx={idx}
+                        checkHandle={checkHandle}
+                        addFile={addFile}
+                        file={file}
+                      />
+                    </div>
                   );
                 })}
               <UploadBtn>
-                이력서 업로드
-                <input
-                  type="file"
-                  multiple
-                  onChange={onInputChange}
-                  style={{ display: 'none' }}
-                />
+                파일업로드
+                <input type="file" multiple onChange={onInputChange} />
               </UploadBtn>
             </div>
-            <NewResumeBtn>새 이력서 작성</NewResumeBtn>
-            <div>
-              <SubmitBtn>제출하기</SubmitBtn>
-            </div>
+            <NewResumeBtn
+              onClick={() => {
+                history.push({ pathname: '/resume-form' });
+              }}
+            >
+              새 이력서 작성
+            </NewResumeBtn>
+            <Footer>
+              <SubmitBtn disabled={disabled}>제출하기</SubmitBtn>
+            </Footer>
           </form>
         </ApplyContainer>
       </ModalApplyContainer>
@@ -90,6 +119,8 @@ const ModalApplyContainer = styled.div`
   border: 1px solid #e8e8e8;
   border-radius: 4px;
   color: ${({ theme }) => theme.onetedBlack};
+  background-color: #ffffff;
+  z-index: 1;
 `;
 
 const ModalApplyTop = styled.div`
@@ -113,10 +144,10 @@ const CloseBtn = styled.button`
 
 const UploadBtn = styled.label`
   display: block;
-  width: 280px;
+  width: 300px;
   height: 50px;
   padding: 16px 0;
-  margin-bottom: 10px;
+  margin: 24px auto 10px;
   border: 1px solid #e1e2e3;
   border-radius: 25px;
   background-color: #fff;
@@ -124,10 +155,14 @@ const UploadBtn = styled.label`
   text-align: center;
   font-size: 16px;
   font-weight: 800;
+
+  input {
+    display: none;
+  }
 `;
 
 const NewResumeBtn = styled.button`
-  width: 280px;
+  width: 300px;
   height: 50px;
   padding: 0;
   margin-bottom: 10px;
@@ -143,12 +178,16 @@ const NewResumeBtn = styled.button`
   }
 `;
 
+const Footer = styled.div`
+  padding-top: 10px;
+  border-top: 1px solid #ececec;
+`;
+
 const SubmitBtn = styled.button`
-  width: 298px;
+  width: 300px;
   height: 50px;
   padding: 0;
-  margin-bottom: 10px;
-  border: 1px solid #e1e2e3;
+  border: none;
   border-radius: 25px;
   background-color: #fff;
   color: #ffffff;
@@ -158,6 +197,15 @@ const SubmitBtn = styled.button`
 
   &:hover {
     cursor: pointer;
+  }
+
+  &:disabled {
+    color: #cccccc;
+    background-color: #f2f4f7;
+
+    &:hover {
+      cursor: auto;
+    }
   }
 `;
 
@@ -190,10 +238,4 @@ const BodyTextContainer = styled.div`
 
 const ApplyContainer = styled.div`
   padding: 20px;
-`;
-
-const UploadList = styled.div`
-  margin-bottom: 10px;
-  border: 1px solid #999999;
-  border-radius: 4px;
 `;
