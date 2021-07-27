@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import MainJobCategori from './MainJobCategori/MainJobCategori';
 import PostList from './PostList/PostList';
 import OrderBy from './OrderBy/OrderBy';
+import Application from '../Application/Application';
 
 function Main() {
   return (
