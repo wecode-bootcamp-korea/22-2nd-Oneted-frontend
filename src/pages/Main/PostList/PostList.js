@@ -9,7 +9,7 @@ function PostList(props) {
     <PostCaradList>
       {props.data.map((post, index) => (
         <li key={index}>
-          <PostCard list={[post]} />
+          <PostCard list={post} />
         </li>
       ))}
     </PostCaradList>

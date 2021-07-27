@@ -1,22 +1,72 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { API } from '../../config';
+import PostCard from '../Main/PostList/PostCard/PostCard';
 
 function SearchResult(props) {
-  const keyword = props.location.search.slice(7);
+  const [postings, setPostings] = useState([]);
+
+  let keyword = '';
+  if (props.location.pathname === '/search') {
+    keyword = props.location.search.slice(7);
+  } else if (props.location.pathname === '/tag-search') {
+    keyword = props.location.search.slice(5);
+  }
+
+  useEffect(() => {
+    if (props.location.pathname === '/search') {
+      fetch(`${API.SEARCH}?query=${keyword}`)
+        .then(res => res.json())
+        .then(data => setPostings(data.result));
+    } else if (props.location.pathname === '/tag-search') {
+      fetch(`${API.SEARCH}?tag=${keyword}`)
+        .then(res => res.json())
+        .then(data => setPostings(data.result.jobPostings));
+    }
+  }, [keyword]);
 
   return (
-    <section>
-      <Keyword>{keyword}</Keyword>
-    </section>
+    <>
+      <Keyword>
+        <p>{keyword}</p>
+      </Keyword>
+      <section>
+        <PostCaradList>
+          {postings.jobPostings?.map(post => (
+            <li key={post.id}>
+              <PostCard list={post} />
+            </li>
+          ))}
+        </PostCaradList>
+      </section>
+    </>
   );
 }
 
 export default SearchResult;
 
 const Keyword = styled.p`
-  ${({ theme }) => theme.setFlex('center')}
-
+  display: flex;
+  justify-content: center;
+  padding-top: 100px;
   height: 159px;
   font-size: 48px;
   border-bottom: 1px solid #e1e2e3;
+`;
+
+const PostCaradList = styled.ul`
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  justify-items: center;
+  width: 1100px;
+  margin: 0 auto;
+  row-gap: 10px;
+
+  li {
+    ${({ theme }) => theme.setFlex}
+    flex-direction: column;
+    height: 334px;
+    width: 270px;
+    overflow: hidden;
+  }
 `;

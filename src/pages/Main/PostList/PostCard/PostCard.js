@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { theme } from '../../../../styles/theme';
 
 function PostCard({ list }) {
-  const { company, title, imageUrl } = list[0];
+  const { company, title, imageUrl } = list;
   return (
     <>
       <div>
@@ -14,7 +14,7 @@ function PostCard({ list }) {
         <h2>{title}</h2>
         <p>{company.name}</p>
         <Text color={theme.onetedGray}>{company.region}</Text>
-        <Text color={theme.onetedGray}>{'1,000,000원'}</Text>
+        <Text color={theme.onetedGray}>1,000,000원</Text>
       </CompanySummery>
     </>
   );
