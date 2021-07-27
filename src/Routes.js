@@ -7,6 +7,7 @@ import Nav from './components/Nav/Nav';
 import Resume from './pages/Resume/Resume';
 import ResumeForm from './pages/Resume/ResumeForm';
 import SearchResult from './pages/SearchResult/SearchResult';
+import ModalApply from './pages/Detail/Modal/ModalApply/UploadFileList/UploadFileList';
 
 class Routes extends Component {
   render() {
@@ -16,7 +17,7 @@ class Routes extends Component {
 
         <Switch>
           <Route exact path="/" component={Main} />
-          <Route exact path="/detail" component={Detail} />
+          <Route exact path="/detail" component={ModalApply} />
           <Route exact path="/resume" component={Resume} />
           <Route exact path="/resume-form" component={ResumeForm} />
           <Route exact path="/search" component={SearchResult} />

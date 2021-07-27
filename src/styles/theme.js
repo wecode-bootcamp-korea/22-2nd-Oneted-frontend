@@ -5,10 +5,12 @@ const theme = {
   setFlex: (justifyContent = 'center', alignItem = 'center') => `
   display: flex;
   justify-content: ${justifyContent};
-  align-items: ${alignItem};`,
+  align-items: ${alignItem};
+  `,
   setFlexColumn: `
   display: flex;
   flex-direction:column;
 `,
 };
+
 export { theme };
