@@ -1,0 +1,24 @@
+{
+  "job_posting_info": {
+    "id": 1,
+    "company": "에이블리코퍼레이션",
+    "country": "한국",
+    "region": "서울",
+    "title": "제목",
+    "image_url": "https://www.yogiyo.co.kr/mobile/image/app_img_560x292_v2.png",
+    "description": {
+      "benefirs": "• 탄력적인 근무 시간\n• 글로벌 근무 환경\n• 간식 제공",
+      "intro": "소개",
+      "main_tasks": "주요업무",
+      "preferred_points": "우대사항",
+      "requirements": "자격요건"
+    }
+  },
+
+  "coordinate": {
+    "latitude": "37.490276608139034",
+    "longitude": "127.00519275854258"
+  },
+
+  "bookmark": false
+}
