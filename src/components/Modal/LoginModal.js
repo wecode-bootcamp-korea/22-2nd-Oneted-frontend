@@ -3,12 +3,10 @@ import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { API } from '../../config';
 import { LoginState } from '../Nav/Nav';
-
 function LoginModal(props) {
   const { Kakao } = window;
   const history = useHistory();
   const loginState = useContext(LoginState);
-
   const handleKakaoLogin = () => {
     Kakao.Auth.login({
       success: function (response) {
@@ -36,7 +34,6 @@ function LoginModal(props) {
       },
     });
   };
-
   return (
     <Dimmer onClick={props.clickModal}>
       <Container>
@@ -66,7 +63,6 @@ function LoginModal(props) {
     </Dimmer>
   );
 }
-
 const Dimmer = styled.section`
   position: fixed;
   top: 0;
@@ -76,7 +72,6 @@ const Dimmer = styled.section`
   background-color: #00000080;
   z-index: 200;
 `;
-
 const Container = styled.div`
   position: relative;
   max-width: 400px;
@@ -85,20 +80,17 @@ const Container = styled.div`
   top: 20%;
   background-color: white;
 `;
-
 const Header = styled.div`
   display: flex;
   justify-content: center;
   padding: 16px 20 16px 20;
   margin: 20px 0 0 20px;
-
   h1 {
     font-size: 26px;
   }
   button {
     background: none;
     border: 0;
-
     i {
       position: absolute;
       font-size: 24px;
@@ -107,23 +99,19 @@ const Header = styled.div`
     }
   }
 `;
-
 const Body = styled.div`
   padding: 20px;
 `;
-
 const Intro = styled.div`
   width: 360px;
   height: 144px;
   margin: 24px 0 40px 0;
   text-align: center;
-
   h1 {
     line-height: 1.54;
     font-size: 26px;
     font-weight: 600;
   }
-
   h2 {
     margin-top: 16px;
     line-height: 1.5;
@@ -132,7 +120,6 @@ const Intro = styled.div`
     color: #666;
   }
 `;
-
 const Btnbox = styled.div`
   button {
     background-color: transparent;
@@ -161,5 +148,4 @@ const Btnbox = styled.div`
     }
   }
 `;
-
 export default LoginModal;
