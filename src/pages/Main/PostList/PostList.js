@@ -1,14 +1,21 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 
 import styled from 'styled-components';
 
 import PostCard from './PostCard/PostCard';
 
-function PostList({ data }) {
+function PostList(props) {
+  const history = useHistory();
   return (
     <PostCaradList>
-      {data.map(post => (
-        <li key={post.id}>
+      {props.data.map((post, index) => (
+        <li
+          key={index}
+          onClick={() => {
+            history.push(`/jobpostings/${post.id}`);
+          }}
+        >
           <PostCard list={post} />
         </li>
       ))}

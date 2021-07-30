@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router';
 import styled from 'styled-components';
+import { API } from '../../../../config';
 
 import UploadFileList from './UploadFileList/UploadFileList';
 
@@ -7,12 +9,12 @@ const ModalApply = props => {
   const [addFile, setAddFile] = useState([]);
   const [disabled, setDisabled] = useState(true);
 
+  const history = useHistory();
+
   useEffect(() => {
     const result = addFile.filter(el => el.checked === true);
-
     result.length > 0 ? setDisabled(false) : setDisabled(true);
   }, [addFile]);
-
   const onInputChange = e => {
     const newFile = [...addFile];
     for (let i = 0; i < e.target.files.length; i++) {
@@ -20,33 +22,37 @@ const ModalApply = props => {
     }
     setAddFile(newFile);
   };
-
   const checkHandle = (e, idx) => {
     const arr = [...addFile];
     const checkedPoint = { file: arr[idx].file, checked: !arr[idx].checked };
     arr[idx] = checkedPoint;
-
     setAddFile(arr);
   };
-
   const onSubmit = e => {
     const formData = new FormData();
     e.preventDefault();
-
     for (let i = 0; i < addFile.length; i++) {
       if (addFile[i].checked) {
         formData.append('file', addFile[i].file);
       }
     }
-
-    fetch('http://10.58.3.209:8000/resumes/file', {
+    fetch(`${API.RESUME}/file`, {
       method: 'POST',
       body: formData,
+      headers: {
+        Authorization: localStorage.getItem('kakao_token'),
+      },
     })
       .then(res => res.json())
-      .then(res => console.log('제출완료', res));
+      .then(res => {
+        if (res['message'] === 'SUCCESS') {
+          alert('제출완료');
+        }
+      })
+      .then(() => {
+        history.push('/mapage');
+      });
   };
-
   return (
     <div>
       <div onClick={props.closeModal} />
@@ -68,7 +74,7 @@ const ModalApply = props => {
           <div>
             <SubmitTextBottom>첨부파일</SubmitTextBottom>
           </div>
-          <form encType="multipart/form-data" onSubmit={onSubmit}>
+          <form onSubmit={onSubmit} encType="multipart/form-data">
             <div>
               {addFile &&
                 addFile.map((file, idx) => {
@@ -83,22 +89,19 @@ const ModalApply = props => {
                     </div>
                   );
                 })}
+
               <UploadBtn>
                 파일업로드
-                <input
-                  type="file"
-                  multiple
-                  onChange={onInputChange}
-                  style={{ display: 'none' }}
-                />
+                <input type="file" multiple onChange={onInputChange} />
               </UploadBtn>
             </div>
-            <NewResumeBtn>새 이력서 작성</NewResumeBtn>
-            <ApplyBottomContainer>
-              <ApplyBottomText>
-                원티드 이력서로 지원하면 최종 합격률이 40% 높아집니다.
-              </ApplyBottomText>
-            </ApplyBottomContainer>
+            <NewResumeBtn
+              onClick={() => {
+                history.push({ pathname: '/resume-form' });
+              }}
+            >
+              새 이력서 작성
+            </NewResumeBtn>
             <Footer>
               <SubmitBtn disabled={disabled}>제출하기</SubmitBtn>
             </Footer>
@@ -108,18 +111,18 @@ const ModalApply = props => {
     </div>
   );
 };
-
 export default ModalApply;
-
 const ModalApplyContainer = styled.div`
   position: fixed;
-  right: calc((100% - 1000px) / 2);
+  top: 70px;
+  right: 117px;
   width: 340px;
   border: 1px solid #e8e8e8;
   border-radius: 4px;
   color: ${({ theme }) => theme.onetedBlack};
+  background-color: #ffffff;
+  z-index: 1;
 `;
-
 const ModalApplyTop = styled.div`
   padding: 15px 20px;
   border-bottom: 1px solid #e8e8e8;
@@ -127,7 +130,6 @@ const ModalApplyTop = styled.div`
   font-size: 16px;
   font-weight: 600;
 `;
-
 const CloseBtn = styled.button`
   position: absolute;
   top: 12px;
@@ -138,7 +140,6 @@ const CloseBtn = styled.button`
   font-size: 16px;
   font-weight: 600;
 `;
-
 const UploadBtn = styled.label`
   display: block;
   width: 300px;
@@ -152,8 +153,10 @@ const UploadBtn = styled.label`
   text-align: center;
   font-size: 16px;
   font-weight: 800;
+  input {
+    display: none;
+  }
 `;
-
 const NewResumeBtn = styled.button`
   width: 300px;
   height: 50px;
@@ -165,17 +168,14 @@ const NewResumeBtn = styled.button`
   color: #666666;
   font-size: 16px;
   font-weight: 800;
-
   &:hover {
     cursor: pointer;
   }
 `;
-
 const Footer = styled.div`
-  padding-top: 20px;
+  padding-top: 10px;
   border-top: 1px solid #ececec;
 `;
-
 const SubmitBtn = styled.button`
   width: 300px;
   height: 50px;
@@ -187,32 +187,26 @@ const SubmitBtn = styled.button`
   background-color: ${({ theme }) => theme.onetedBlue};
   font-size: 16px;
   font-weight: 800;
-
   &:hover {
     cursor: pointer;
   }
-
   &:disabled {
     color: #cccccc;
     background-color: #f2f4f7;
-
     &:hover {
       cursor: auto;
     }
   }
 `;
-
 const SubmitText = styled.p`
   display: inline-block;
   width: 80px;
   font-size: 16px;
   font-weight: 600;
 `;
-
 const SubmitTextBottom = styled(SubmitText)`
   margin: 30px 0 20px 0;
 `;
-
 const SubmitInput = styled.input`
   width: calc(100% - 84px);
   padding: 0;
@@ -221,24 +215,12 @@ const SubmitInput = styled.input`
   font-weight: 600;
   outline-style: none;
 `;
-
 const BodyTextContainer = styled.div`
   height: 50px;
   margin-bottom: 5px;
   padding-top: 18px;
   border-bottom: 1px solid #e1e2e3;
 `;
-
 const ApplyContainer = styled.div`
   padding: 20px;
-`;
-
-const ApplyBottomContainer = styled.div`
-  padding: 30px 0;
-`;
-
-const ApplyBottomText = styled.p`
-  font-size: 13px;
-  line-height: 1.4;
-  color: #666666;
 `;

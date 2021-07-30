@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
+import { API } from '../../config';
 
 function ResumeButton({ resume, setResumeData, resumeData }) {
   const [isOption, setIsOption] = useState(false);
@@ -17,7 +18,10 @@ function ResumeButton({ resume, setResumeData, resumeData }) {
   };
 
   const deleteResume = () => {
-    fetch(`http://54.180.99.36:8000/resumes/${resume.id}`, {
+    fetch(`${API.RESUME}/${resume.id}`, {
+      headers: {
+        Authorization: localStorage.getItem('kakao_token'),
+      },
       method: 'DELETE',
     })
       .then(res => res.json())
@@ -65,6 +69,7 @@ const ResumeBox = styled.div`
 
   a {
     text-decoration: none;
+    color: black;
   }
 `;
 

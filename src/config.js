@@ -5,4 +5,5 @@ export const API = {
   LOGIN: `${BASE_URL}/users/kakaologin`,
   RESUME: `${BASE_URL}/resumes`,
   USER_INFO: `${BASE_URL}/users`,
+  JOBPOSTING: `${BASE_URL}/jobpostings`,
 };

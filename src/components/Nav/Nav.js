@@ -38,7 +38,7 @@ const Nav = () => {
           <Link to="/salary">
             <li>직군별 연봉</li>
           </Link>
-          <Link to="resume">
+          <Link to="/resume">
             <li>이력서</li>
           </Link>
         </NavCategory>
@@ -51,14 +51,15 @@ const Nav = () => {
             {!isLoginOn ? (
               <li onClick={handleModal}>회원가입/로그인</li>
             ) : (
-              <li onClick={handleLogout}>로그아웃</li>
+              <>
+                <i className="far fa-user" />
+                <li onClick={handleLogout}>로그아웃</li>
+              </>
             )}
 
             <LoginState.Provider value={{ isLoginOn, setIsLoginOn }}>
               {isModalOn && <LoginModal clickModal={handleModal} />}
             </LoginState.Provider>
-
-            <li>기업 서비스</li>
           </AsideNav>
         </aside>
       </Container>
@@ -91,10 +92,16 @@ const NavCategory = styled.ul`
 
   li {
     padding: 15px;
+    color: black;
+    cursor: pointer;
 
     &:hover {
       border-bottom: 1px solid ${({ theme }) => theme.onetedGray};
     }
+  }
+
+  a {
+    text-decoration: none;
   }
 `;
 
@@ -103,6 +110,7 @@ const AsideNav = styled.ul`
 
   li {
     padding: 10px;
+    cursor: pointer;
   }
 `;
 

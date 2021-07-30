@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { API } from '../../config';
 import ResumeButton from './ResumeButton';
 
 function Resume() {
   const [resumeData, setResumeData] = useState([]);
 
   useEffect(() => {
-    fetch('http://54.180.99.36:8000/resumes')
+    fetch(`${API.RESUME}`, {
+      headers: {
+        Authorization: localStorage.getItem('kakao_token'),
+      },
+    })
       .then(res => res.json())
       .then(datas => {
         setResumeData(datas.result);
@@ -44,7 +49,7 @@ function Resume() {
               </Wrapper>
             </button>
           </ResumeBox>
-          {resumeData.map(resume => (
+          {resumeData?.map(resume => (
             <ResumeButton
               key={resume.id}
               resume={resume}
@@ -60,10 +65,12 @@ function Resume() {
 export default Resume;
 
 const Body = styled.main`
+  padding-top: 40px;
   background-color: rgb(248, 248, 250);
 `;
 const ResumeContainer = styled.section`
   margin: 50px 126px 0 126px;
+  padding-top: 60px;
 `;
 
 const ResumeHeader = styled.div`
