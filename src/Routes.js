@@ -26,6 +26,7 @@ class Routes extends Component {
           <Route exact path="/tag-search" component={SearchResult} />
           <Route exact path="/salary" component={Salary} />
           <Route exact path="/mypage" component={Application} />
+          <Route exact path="/mypage/:id" component={Application} />
         </Switch>
       </Router>
     );

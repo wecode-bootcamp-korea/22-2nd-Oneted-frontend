@@ -1,8 +1,6 @@
 import React from 'react';
-
 import styled from 'styled-components';
 import { theme } from '../../../../styles/theme';
-
 function PostCard({ list }) {
   const { company, title, imageUrl, id } = list;
   return (
@@ -22,15 +20,12 @@ function PostCard({ list }) {
     </>
   );
 }
-
 export default PostCard;
-
 const PostImage = styled.img`
   width: 250px;
   height: 187.5px;
   border-radius: 2.5%;
 `;
-
 const CompanySummery = styled.summary`
   ${({ theme }) => theme.setFlex('space-around', 'flex-start')}
   flex-direction: column;
@@ -38,13 +33,11 @@ const CompanySummery = styled.summary`
   height: 90px;
   margin-top: 15px;
   margin-left: 20px;
-
   & h2 {
     font-size: 18px;
     font-weight: bold;
   }
 `;
-
 const Text = styled.p`
   color: ${props => props.color};
 `;

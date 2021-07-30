@@ -1,24 +1,24 @@
 import React from 'react';
-
 import styled from 'styled-components';
-
 import PostCard from './PostCard/PostCard';
-
-function PostList({ data }) {
-  console.log(`data`, data);
+function PostList({ data, history }) {
+  console.log(`data`, data.id);
   return (
     <PostCaradList>
       {data.map(post => (
-        <li key={post.id}>
+        <li
+          key={post.id}
+          onClick={() => {
+            history.push(`/jobpostings/${post.targetedPosting.id}`);
+          }}
+        >
           <PostCard list={post.targetedPosting} />
         </li>
       ))}
     </PostCaradList>
   );
 }
-
 export default PostList;
-
 const PostCaradList = styled.ul`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -26,7 +26,6 @@ const PostCaradList = styled.ul`
   width: 100%;
   margin: 0 auto;
   row-gap: 10px;
-
   & li {
     ${({ theme }) => theme.setFlex()}
     flex-direction: column;

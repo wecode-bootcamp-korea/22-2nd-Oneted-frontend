@@ -50,7 +50,7 @@ const ModalApply = props => {
         }
       })
       .then(() => {
-        history.push('/mapage');
+        history.push('/mypage');
       });
   };
   return (

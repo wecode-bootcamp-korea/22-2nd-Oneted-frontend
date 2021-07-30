@@ -29,7 +29,9 @@ const Nav = () => {
     <Section>
       <Container>
         <div>
-          <h1>wanted</h1>
+          <Link to="/">
+            <h1>wanted</h1>
+          </Link>
         </div>
         <NavCategory>
           <Link to="/">
@@ -52,7 +54,9 @@ const Nav = () => {
               <li onClick={handleModal}>회원가입/로그인</li>
             ) : (
               <>
-                <i className="far fa-user" />
+                <Link to={'/mypage'}>
+                  <i className="far fa-user" />
+                </Link>
                 <li onClick={handleLogout}>로그아웃</li>
               </>
             )}
@@ -84,6 +88,11 @@ const Container = styled.div`
   h1 {
     font-size: 30px;
     font-weight: 700;
+  }
+
+  a {
+    color: black;
+    text-decoration: none;
   }
 `;
 
