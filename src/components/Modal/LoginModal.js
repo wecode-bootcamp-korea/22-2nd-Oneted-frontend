@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
+import { API } from '../../config';
 import { LoginState } from '../Nav/Nav';
 
 function LoginModal(props) {
@@ -11,7 +12,7 @@ function LoginModal(props) {
   const handleKakaoLogin = () => {
     Kakao.Auth.login({
       success: function (response) {
-        fetch(`http://10.58.1.2:8000/users/kakaologin`, {
+        fetch(`${API.LOGIN}`, {
           headers: {
             Authorization: response.access_token,
           },

@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { API } from '../../config';
 import PostCard from '../Main/PostList/PostCard/PostCard';
 
 function SearchResult(props) {
   const [postings, setPostings] = useState([]);
+  const history = useHistory();
 
   let keyword = '';
   if (props.location.pathname === '/search') {
@@ -21,7 +23,7 @@ function SearchResult(props) {
     } else if (props.location.pathname === '/tag-search') {
       fetch(`${API.SEARCH}?tag=${keyword}`)
         .then(res => res.json())
-        .then(data => setPostings(data.result.jobPostings));
+        .then(data => setPostings(data.result));
     }
   }, [keyword]);
 
@@ -32,8 +34,13 @@ function SearchResult(props) {
       </Keyword>
       <section>
         <PostCaradList>
-          {postings.jobPostings?.map(post => (
-            <li key={post.id}>
+          {postings?.map(post => (
+            <li
+              key={post.id}
+              onClick={() => {
+                history.push(`/jobpostings/${post.id}`);
+              }}
+            >
               <PostCard list={post} />
             </li>
           ))}
@@ -58,8 +65,9 @@ const PostCaradList = styled.ul`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   justify-items: center;
+
   width: 1100px;
-  margin: 0 auto;
+  margin: 50px auto;
   row-gap: 10px;
 
   li {

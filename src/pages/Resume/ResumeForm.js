@@ -4,6 +4,7 @@ import html2canvas from 'html2canvas';
 
 import styled from 'styled-components';
 import { useHistory, useParams } from 'react-router-dom';
+import { API } from '../../config';
 
 function ResumeForm() {
   const { id } = useParams();
@@ -15,11 +16,19 @@ function ResumeForm() {
 
   useEffect(() => {
     if (id) {
-      fetch(`http://54.180.99.36:8000/resumes/${id}`)
+      fetch(`${API.RESUME}/${id}`, {
+        headers: {
+          Authorization: localStorage.getItem('kakao_token'),
+        },
+      })
         .then(res => res.json())
         .then(resume => setResumeData(resume.result));
     } else {
-      fetch(`http://54.180.99.36:8000/users/info`)
+      fetch(`${API.USER_INFO}`, {
+        headers: {
+          Authorization: localStorage.getItem('kakao_token'),
+        },
+      })
         .then(res => res.json())
         .then(userInfo => setUserInfo(userInfo.result));
     }
@@ -63,17 +72,24 @@ function ResumeForm() {
   };
 
   const fetchFunction = (apiAdress, method, message) => {
-    fetch(apiAdress, {
-      method: method,
-      body: JSON.stringify({
-        title: resumeData.title ? resumeData.title : userInfo.name,
-        description: resumeData.content.description,
-        career: resumeData.content.career,
-        education: resumeData.content.education,
-        skill: resumeData.content.skill,
-        isDone: isDone,
-      }),
-    })
+    fetch(
+      apiAdress,
+      {
+        method: method,
+        headers: {
+          Authorization: localStorage.getItem('kakao_token'),
+        },
+        body: JSON.stringify({
+          title: resumeData.title ? resumeData.title : userInfo.name,
+          description: resumeData.content.description,
+          career: resumeData.content.career,
+          education: resumeData.content.education,
+          skill: resumeData.content.skill,
+          isDone: isDone,
+        }),
+      },
+      {}
+    )
       .then(res => res.json())
       .then(result => {
         if (result.message === 'SUCCESS') {
@@ -85,13 +101,9 @@ function ResumeForm() {
 
   const submitResume = () => {
     if (!id) {
-      fetchFunction('http://54.180.99.36:8000/resumes', 'POST', '수정 완료');
+      fetchFunction(`${API.RESUME}`, 'POST', '작성완료');
     } else {
-      fetchFunction(
-        `http://54.180.99.36:8000/resumes/${id}`,
-        'PATCH',
-        '작성 완료'
-      );
+      fetchFunction(`${API.RESUME}/${id}`, 'PATCH', '수정 완료');
     }
   };
 
@@ -213,12 +225,14 @@ const DESCRIPTION = [
 const Container = styled.div`
   position: relative;
   margin: 0 54px;
+  max-width: 1000px;
 `;
 
 const Header = styled.div`
   position: fixed;
   height: 50px;
   width: 80%;
+  padding-top: 40px;
 
   div {
     padding-top: 50px;
@@ -279,7 +293,7 @@ const Section = styled.section`
 
   textarea {
     width: 1450px;
-    margin-top: 30px;
+    margin: 30px 0 120px 0;
     font-size: 16px;
     border: none;
     outline: none;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import styled from 'styled-components';
 import { chartOptions } from './ChartData';
@@ -7,16 +7,16 @@ import { chartData } from './ChartData';
 function Salary() {
   const [salary, setSalary] = useState([]);
   const [jobs, setJobs] = useState([]);
-  const [jobCategory, setJobCategory] = useState('nodeJS 개발자');
+  const [jobCategory, setJobCategory] = useState('서버 개발자');
 
   const handleOnChange = e => {
     setJobCategory(e.target.value);
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     fetch(
       `http://54.180.99.36:8000/jobpostings/salary?jobGroup=개발&job=${
-        jobCategory || `전체`
+        jobCategory || `프론트엔드 개발자`
       }`
     )
       .then(res => res.json())

@@ -17,14 +17,15 @@ class Routes extends Component {
         <Nav />
         <Switch>
           <Route exact path="/" component={Main} />
-          <Route exact path="/detail" component={Detail} />
+          <Route exact path="/jobpostings" component={Detail} />
+          <Route exact path="/jobpostings/:id" component={Detail} />
           <Route exact path="/resume" component={Resume} />
           <Route exact path="/resume-form" component={ResumeForm} />
           <Route exact path="/resume-form/:id" component={ResumeForm} />
           <Route exact path="/search" component={SearchResult} />
           <Route exact path="/tag-search" component={SearchResult} />
           <Route exact path="/salary" component={Salary} />
-          <Route exact path="/application" component={Application} />
+          <Route exact path="/mypage" component={Application} />
         </Switch>
       </Router>
     );

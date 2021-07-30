@@ -6,6 +6,7 @@ import FilterButton from './FilterButton/FilterButton';
 import OrderBy from './OrderBy/OrderBy';
 import PostList from './PostList/PostList';
 import RegionButton from './RegionButton/RegionButton';
+import { API } from '../../config';
 
 function Main() {
   const [postListData, setpostListData] = useState([]);
@@ -46,10 +47,10 @@ function Main() {
   const makeQuery = state => {
     const query = state.reduce((acc, cv) => {
       if (!acc && cv) {
-        return acc + 'tags=' + cv;
+        return acc + 'tag=' + cv;
       }
       if (acc) {
-        return acc + '&tags=' + cv;
+        return acc + '&tag=' + cv;
       }
       return acc;
     }, '');
@@ -91,6 +92,7 @@ function Main() {
 
   return (
     <main>
+      {/* <MainSlider /> */}
       <FilterContainer>
         <LeftFilterButtonWrap>
           <FilterButton

@@ -34,7 +34,7 @@ function SearchModal({ clickSearch }) {
 
   const handleKeyEvent = e => {
     if (e.key === 'Enter') {
-      history.push(`/jobpostings?query=${searchText}`);
+      history.push(`/search?query=${searchText}`);
       clickSearch();
       e.preventDefault();
     }
