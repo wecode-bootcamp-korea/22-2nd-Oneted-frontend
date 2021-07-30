@@ -46,10 +46,10 @@ function Main() {
   const makeQuery = state => {
     const query = state.reduce((acc, cv) => {
       if (!acc && cv) {
-        return acc + 'tags=' + cv;
+        return acc + 'tag=' + cv;
       }
       if (acc) {
-        return acc + '&tags=' + cv;
+        return acc + '&tag=' + cv;
       }
       return acc;
     }, '');
@@ -58,10 +58,15 @@ function Main() {
 
   const onIntersect = ([entry]) => {
     offsetNumberRef.current = offsetNumberRef.current + 20;
-    console.log(`postListData`, postListData);
+    console.log(
+      `fetch`,
+      `${makeQuery(tagFetchData)}&offset=${offsetNumberRef.current}&limit=20`
+    );
     if (entry.isIntersecting) {
       fetch(
-        `http://54.180.99.36:8000/jobpostings?&offset=${offsetNumberRef.current}&limit=20`
+        `http://54.180.99.36:8000/jobpostings?${makeQuery(
+          tagFetchData
+        )}&offset=${offsetNumberRef.current}&limit=20`
       )
         .then(res => res.json())
         .then(data => {
@@ -84,7 +89,7 @@ function Main() {
 
   const gotoTopHandler = () => {
     window.scrollTo({
-      top: 400,
+      top: 0,
       behavior: 'smooth',
     });
   };

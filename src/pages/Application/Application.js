@@ -7,22 +7,31 @@ import styled from 'styled-components';
 import PostList from './PostList/PostList';
 
 function Application() {
-  const [applicationCount, setApplicationCount] = useState([]);
-  const [userApplication, setUserApplication] = useState([]);
+  const [applicationList, setApplicationList] = useState([]);
+  const [userApplication, setUserApplication] = useState([
+    { name: '전체', count: 0 },
+    { name: '지원 완료', count: 0 },
+    { name: '서류 통과', count: 0 },
+    { name: '최종 합격', count: 0 },
+    { name: '불합격', count: 0 },
+  ]);
+
+  useEffect(() => {}, []);
 
   useEffect(() => {
-    setApplicationCount(APPLICATION_DATA);
-  }, []);
-
-  useEffect(() => {
-    fetch(`${API.RESUME}`, {
+    fetch(`${API.USER_INFO}`, {
       headers: {
         Authorization: localStorage.getItem('kakao_token'),
       },
     })
       .then(res => res.json())
-      .then(datas => {
-        setUserApplication(datas.result);
+      .then(data => {
+        userApplication.filter(info => info.name === '전체')[0].count =
+          data.result.applies.length;
+        userApplication.filter(info => info.name === '지원 완료')[0].count =
+          data.result.applies.length;
+        setUserApplication(prev => [...prev]);
+        setApplicationList(data.result.applies);
       });
   }, []);
 
@@ -56,7 +65,7 @@ function Application() {
       </Aside>
       <Wraper>
         <CountBoxWraper>
-          {applicationCount.map((data, index) => (
+          {userApplication.map((data, index) => (
             <CountBox key={index} index={index}>
               <p>{data.count}</p>
               <span>{data.name}</span>
@@ -64,13 +73,16 @@ function Application() {
           ))}
         </CountBoxWraper>
         <TotalCount>
-          <span>총 0건</span>
+          <span>
+            총 {userApplication.filter(info => info.name === '전체')[0].count}{' '}
+            건
+          </span>
         </TotalCount>
         <SearchResult>
           <Info />
           <ListBox>
             {userApplication.length ? (
-              <PostList data={userApplication} />
+              <PostList data={applicationList} />
             ) : (
               <EmptyBox>
                 <i className="fas fa-search"></i>
@@ -129,7 +141,6 @@ const Wraper = styled.div`
 const CountBoxWraper = styled.div`
   height: 300px;
   width: 100%;
-  flex: 3;
   display: flex;
 `;
 
@@ -157,8 +168,7 @@ const CountBox = styled(LeftSecction)`
 `;
 
 const TotalCount = styled.div`
-  height: 200px;
-  flex: 1;
+  height: 50px;
   display: flex;
   justify-content: space-between;
 
