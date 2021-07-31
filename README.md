@@ -29,7 +29,8 @@ oneted project
 
 ### **데모 영상(이미지 클릭)**
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/caab510e-b24a-4363-955e-1d2b98c31144/스크린샷_2021-07-30_오후_4.51.48.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/caab510e-b24a-4363-955e-1d2b98c31144/스크린샷_2021-07-30_오후_4.51.48.png)
+<img width="1437" alt="스크린샷 2021-07-30 오후 4 51 35" src="https://user-images.githubusercontent.com/83798502/127731625-939d0686-dcda-46e8-8da4-ffd4e90bd2a4.png">
+
 
 **적용 기술 및 구현 기능**
 
