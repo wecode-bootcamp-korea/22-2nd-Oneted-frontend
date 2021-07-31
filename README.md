@@ -27,7 +27,7 @@ oneted project
 
 - 기업과 취업 중인 고객을 서로 매칭해 지원을 하는 시스템이 매력적으로 다가와 진행하게 되었습니다.
 
-### **데모 영상(이미지 클릭)**
+### **데모 이미지**
 
 <img width="1437" alt="스크린샷 2021-07-30 오후 4 51 35" src="https://user-images.githubusercontent.com/83798502/127731625-939d0686-dcda-46e8-8da4-ffd4e90bd2a4.png">
 
