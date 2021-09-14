@@ -26,12 +26,14 @@ function SearchModal({ clickSearch }) {
     e.stopPropagation();
   };
 
+  // 검색 입력 값 state 저장
   const handleChange = e => {
     if (e.target.value !== '') {
       setSearchText(e.target.value);
     }
   };
 
+  // enter 키 이벤트
   const handleKeyEvent = e => {
     if (e.key === 'Enter') {
       history.push(`/search?query=${searchText}`);

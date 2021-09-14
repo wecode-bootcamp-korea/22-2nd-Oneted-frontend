@@ -1,7 +1,11 @@
 import React, { useState, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
 const ModalShare = props => {
+  const location = useLocation();
+  const hereLocation = 'https://www.wanted.co.kr' + location.pathname;
+
   const [successTextCopy, setSuccessTextCopy] = useState(false);
 
   const textInput = useRef();
@@ -34,7 +38,7 @@ const ModalShare = props => {
             <CopyInputBox
               ref={textInput}
               type="text"
-              value="url 주소"
+              value={hereLocation}
               readOnly
             />
             <CopyBtn>복사</CopyBtn>
